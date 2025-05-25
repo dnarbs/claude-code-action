@@ -66,16 +66,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Bun
-      uses: oven-sh/setup-bun@v2
-      with:
-        bun-version: 1.2.11
-
-    - name: Install Dependencies
-      shell: bash
-      run: |
-        cd ${{ github.action_path }}
-        bun install
+    # Modified for self-hosted runner: Skip Bun/Node.js setup
+    # Dependencies are pre-installed on the self-hosted runner
 
     - name: Prepare action
       id: prepare
@@ -94,7 +86,7 @@ runs:
     - name: Run Claude Code
       id: claude-code
       if: steps.prepare.outputs.contains_trigger == 'true'
-      uses: anthropics/claude-code-base-action@beta
+      uses: dnarbs/claude-code-base-action@main
       with:
         prompt_file: /tmp/claude-prompts/claude-prompt.txt
         allowed_tools: ${{ env.ALLOWED_TOOLS }}
